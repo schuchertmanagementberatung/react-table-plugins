@@ -39,6 +39,7 @@ function useInstance(instance) {
     getExportFileName = defaultGetExportFileName,
     getExportFileBlob = defaultGetExportFileBlob,
     plugins,
+    prepareRow,
   } = instance;
 
   ensurePluginOrder(
@@ -80,6 +81,7 @@ function useInstance(instance) {
 
       // Rows which are exportable
       let exportableRows = (all ? initialRows : rows).map((row) => {
+        prepareRow(row);
         return exportableColumns.map((col) => {
           const { getCellExportValue = defaultGetCellExportValue } = col;
 
@@ -103,7 +105,7 @@ function useInstance(instance) {
         downloadFileViaBlob(fileBlob, fileName, fileType);
       }
     },
-    [getExportFileBlob, getExportFileName, initialRows, rows, allColumns]
+    [getExportFileBlob, getExportFileName, initialRows, rows, allColumns, prepareRow]
   );
 
   Object.assign(instance, {
